@@ -26,16 +26,15 @@ import com.example.mymemory2.adapter.TallyAdapter;
 
 import java.util.Calendar;
 import java.util.List;
+
 /**
- *
- * 记账本的添加（按钮）、删除（选中长按 或 选中点击删除按钮）、修改（选中修改后删除）
- * ListView数据更新问题（原本是刷新，但会产生新页面，点击返回会返回原本页面，若操作太多次，要返回很多次才能返回到主页
- * 使用adapter.notifyDataSetChanged()会根据list的变化进行更新
- * 所以添加、修改、删除也要对list进行操作
- * 添加实现的结果是最新添加的项只能在最上面显示，不能跟其他一样按日期排序，退出后再进入才能按日期排序，且刚添加的项目不能删除和修改，只能退出该页面再操作
- * 删除要根据点击的账目项的id在list中找到包含该id，然后再删除该项
- * 修改先删除list中对应项，再添加
- *
+ * 记账本的添加、删除、修改功能
+ * ListView 数据更新问题（原本是刷新，但会产生新页面，点击返回会返回原本页面，若操作太多次，要返回很多次才能返回到主页）
+ * 使用 adapter.notifyDataSetChanged() 会根据 list 的变化进行更新
+ * 所以添加、修改、删除也要对 list 进行操作
+ * 添加实现的结果是最新添加的项只能在最上面显示，不能按日期排序，退出后再进入才能按日期排序，且刚添加的项目不能删除和修改，只能退出该页面再操作
+ * 删除要根据点击的账目项的 id 在 list 中找到包含该 id，然后再删除该项
+ * 修改先删除 list 中对应项，再添加
  */
 public class ManageActivity extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener{
 
@@ -70,12 +69,15 @@ public class ManageActivity extends AppCompatActivity implements View.OnClickLis
         initData();
     }
 
+    /**
+     * 初始化数据，设置 ListView 的点击事件和长按事件
+     */
     private void initData() {
         tallyTB = new TallyTB(this);
         tallyTB.open();
-        //账目项的显示
+        // 账目项的显示
         showQueryData();
-        //单击账目项修改
+        // 单击账目项修改
         lv_record.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             Tally tally;
             @Override
@@ -88,15 +90,15 @@ public class ManageActivity extends AppCompatActivity implements View.OnClickLis
                 sp_selectItem();
             }
 
-            //根据数据库存放的收入or支出设定类型的默认选择值
+            // 根据数据库存放的收入或支出设定类型的默认选择值
             public void sp_selectItem(){
                 SpinnerAdapter apsAdapter = sp_type.getAdapter();
                 if(tally.getTallyType().equals(apsAdapter.getItem(0).toString()))
                     sp_type.setSelection(0, true);
                 else sp_type.setSelection(1, true);
-                }
-            });
-        //长按删除
+            }
+        });
+        // 长按删除
         lv_record.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long id) {
@@ -127,6 +129,9 @@ public class ManageActivity extends AppCompatActivity implements View.OnClickLis
         });
     }
 
+    /**
+     * 显示查询到的数据，并设置适配器
+     */
     private void showQueryData() {
         if(list != null){
             list.clear();
@@ -166,7 +171,9 @@ public class ManageActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    //账目删除实现方法
+    /**
+     * 账目删除实现方法
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void delete() {
         if(tallyTB.delete(tally_id)){
@@ -178,30 +185,51 @@ public class ManageActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
-    //账目更新实现方法
+    /**
+     * 账目更新实现方法
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void update() {
         Tally tally1 = new Tally();
         String tallyState = et_in_state.getText().toString();
         String tallyType = sp_type.getSelectedItem().toString();
-        double money = Double.parseDouble(et_in_money.getText().toString());
+        String moneyStr = et_in_money.getText().toString();
         String tallyDate = et_date.getText().toString();
+
+        if (TextUtils.isEmpty(moneyStr)) {
+            ToastUtil.show(this, "金额不能为空");
+            return;
+        }
+
+        // 使用正则表达式验证输入是否为有效数字
+        String regex = "^[-+]?\\d+(\\.\\d+)?$";
+        if (!moneyStr.matches(regex)) {
+            ToastUtil.show(this, "金额格式无效");
+            return;
+        }
+
+        double money = Double.parseDouble(moneyStr);
 
         tally1.setTallyMoney(money);
         tally1.setTallyTime(tallyDate);
         tally1.setTallyType(tallyType);
         tally1.setTallyState(tallyState);
-        if(tally_id > 0){
-            if(tallyTB.update(tally_id, tallyDate, tallyType, money, tallyState)){
+
+        if (tally_id > 0) {
+            if (tallyTB.update(tally_id, tallyDate, tallyType, money, tallyState)) {
                 ToastUtil.show(this, "修改成功");
                 list.removeIf(tally -> tally.getId() == tally_id);
                 list.add(0, tally1);
                 adapter.notifyDataSetChanged();
-            } else ToastUtil.show(this, "修改失败");
+            } else {
+                ToastUtil.show(this, "修改失败");
+            }
         }
     }
 
-    //账目添加实现方法
+    /**
+     * 账目添加实现方法
+     */
     private void add() {
         String str_money = et_in_money.getText().toString();
         String state = et_in_state.getText().toString();
@@ -209,7 +237,7 @@ public class ManageActivity extends AppCompatActivity implements View.OnClickLis
         String date = et_date.getText().toString();
         Tally tally = new Tally();
         if(TextUtils.isEmpty(str_money) || TextUtils.isEmpty(state) || TextUtils.isEmpty(type)
-         || TextUtils.isEmpty(date)){
+                || TextUtils.isEmpty(date)){
             ToastUtil.show(this, "请输入完整账目信息");
             return;
         }

@@ -29,12 +29,13 @@ public class NotebookActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notepad);
-        //用于显示便签的列表
+        // 用于显示便签的列表
         listView = (ListView) findViewById(R.id.listview);
         ImageView add = (ImageView) findViewById(R.id.add);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // 点击添加按钮，跳转到RecordActivity页面
                 Intent intent = new Intent(NotebookActivity.this,
                         RecordActivity.class);
                 startActivityForResult(intent, 1);
@@ -43,19 +44,19 @@ public class NotebookActivity extends Activity {
         initData();
     }
 
-
     protected void initData() {
         noteTB = new NoteTB(this);
         noteTB.open();
         showQueryData();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent,View view,int position,long id){
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // 点击列表项，跳转到RecordActivity页面，并传递相关数据
                 NotebookBean notepadBean = list.get(position);
                 Intent intent = new Intent(NotebookActivity.this, RecordActivity.class);
                 intent.putExtra("id", notepadBean.getId());
-                intent.putExtra("time", notepadBean.getNotebookTime()); //记录的时间
-                intent.putExtra("content", notepadBean.getNotebookContent()); //记录的内容
+                intent.putExtra("time", notepadBean.getNotebookTime()); // 记录的时间
+                intent.putExtra("content", notepadBean.getNotebookContent()); // 记录的内容
                 NotebookActivity.this.startActivityForResult(intent, 1);
                 System.out.printf(notepadBean.getId());
             }
@@ -63,17 +64,19 @@ public class NotebookActivity extends Activity {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                // 长按列表项，弹出确认对话框，询问是否删除记录
                 AlertDialog dialog;
-                AlertDialog.Builder builder = new AlertDialog.Builder( NotebookActivity.this)
+                AlertDialog.Builder builder = new AlertDialog.Builder(NotebookActivity.this)
                         .setMessage("是否删除此记录？")
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                // 确定删除记录
                                 NotebookBean notepadBean = list.get(position);
-                                if(noteTB.deleteData(notepadBean.getId())){
+                                if (noteTB.deleteData(notepadBean.getId())) {
                                     list.remove(position);
                                     adapter.notifyDataSetChanged();
-                                    Toast.makeText(NotebookActivity.this,"删除成功",
+                                    Toast.makeText(NotebookActivity.this, "删除成功",
                                             Toast.LENGTH_SHORT).show();
                                 }
                             }
@@ -84,27 +87,28 @@ public class NotebookActivity extends Activity {
                                 dialog.dismiss();
                             }
                         });
-                dialog =  builder.create();
+                dialog = builder.create();
                 dialog.show();
                 return true;
             }
         });
-
     }
 
-    private void showQueryData(){
-        if (list!=null){
+    private void showQueryData() {
+        if (list != null) {
             list.clear();
         }
-        //从数据库中查询数据(保存的标签)
+        // 从数据库中查询数据(保存的标签)
         list = noteTB.query();
         adapter = new NotebookAdapter(this, list);
         listView.setAdapter(adapter);
     }
+
     @Override
-    protected void onActivityResult(int requestCode,int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode==1&&resultCode==2){
+        // 接收RecordActivity返回的结果，刷新列表数据
+        if (requestCode == 1 && resultCode == 2) {
             showQueryData();
         }
     }

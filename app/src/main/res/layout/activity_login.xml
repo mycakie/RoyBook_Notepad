@@ -16,13 +16,13 @@
 
         <TextView
             android:id="@+id/textView1"
-            android:layout_width="330dp"
-            android:layout_height="220dp"
+            android:layout_width="337dp"
+            android:layout_height="250dp"
             android:layout_marginHorizontal="45dp"
             android:layout_marginTop="30dp"
             android:background="@drawable/login_logo"
             android:gravity="center"
-            android:textColor="#fff"
+            android:textColor="#FFFFFF"
             android:textSize="24dp" />
 
         <TextView
@@ -47,9 +47,9 @@
                 android:id="@+id/imageView3"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_weight="0"
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="5dp"
+                android:layout_weight="0"
                 app:srcCompat="@drawable/account" />
 
             <EditText
@@ -92,29 +92,29 @@
 
         <LinearLayout
             android:id="@+id/ly"
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/et_password">
+            android:layout_below="@id/et_password"
+            android:orientation="horizontal">
 
             <CheckBox
                 android:id="@+id/ck_rememberPwd"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="5"
                 android:layout_marginLeft="25dp"
+                android:layout_weight="5"
                 android:text="记住密码"
-                android:textColor="#1E90FF"/>
+                android:textColor="#1E90FF" />
 
             <Button
                 android:id="@+id/btn_forgetPwd"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
                 android:layout_marginRight="-10dp"
+                android:layout_weight="2"
                 android:background="#00000000"
                 android:text="忘记密码"
-                android:textColor="#1E90FF"/>
+                android:textColor="#1E90FF" />
 
         </LinearLayout>
 
@@ -131,8 +131,8 @@
                 android:layout_height="60dp"
                 android:layout_weight="1"
                 android:text="登录"
-                android:textSize="19dp"
                 android:textColor="@color/white"
+                android:textSize="19dp"
                 app:backgroundTint="#4757AE"
                 app:cornerRadius="50dp" />
 
@@ -143,9 +143,9 @@
             android:id="@+id/btn_register"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:background="#00000000"
             android:gravity="center"
             android:text="还没有账号？现在注册"
-            android:background="#00000000"
             android:textColor="#888282" />
 
 

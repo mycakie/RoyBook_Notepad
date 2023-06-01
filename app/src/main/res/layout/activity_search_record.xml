@@ -21,8 +21,8 @@
 
             <ImageView
                 android:id="@+id/imageView2"
-                android:layout_width="230dp"
-                android:layout_height="160dp"
+                android:layout_width="257dp"
+                android:layout_height="204dp"
                 app:srcCompat="@drawable/income_2" />
 
             <TextView

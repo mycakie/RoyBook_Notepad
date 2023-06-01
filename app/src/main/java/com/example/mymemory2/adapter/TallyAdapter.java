@@ -6,6 +6,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.example.mymemory2.Bean.NotebookBean;
 import com.example.mymemory2.Bean.Tally;
 import com.example.mymemory2.ManageActivity;
@@ -31,22 +33,26 @@ public class TallyAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
+        // 返回列表中的项数
         return list == null? 0: list.size();
     }
 
     @Override
     public Object getItem(int i) {
+        // 返回指定位置的项
         return list.get(i);
     }
 
     @Override
     public long getItemId(int i) {
+        // 返回指定位置的项的ID
         return i;
     }
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         if(view == null){
+            // 如果视图为空，则加载项的布局
             view = layoutInflater.inflate(R.layout.record_item_layout, null);
             viewHolder = new ViewHolder(view);
             view.setTag(viewHolder);
@@ -54,7 +60,10 @@ public class TallyAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
 
+        // 获取当前位置的 Tally 对象
         Tally tally = (Tally) getItem(i);
+
+        // 使用 ViewHolder 设置项的日期、类型、金额和状态
         viewHolder.list_date.setText(tally.getTallyTime());
         viewHolder.list_type.setText(tally.getTallyType());
         viewHolder.list_money.setText(String.valueOf(tally.getTallyMoney()));
@@ -68,11 +77,15 @@ public class TallyAdapter extends BaseAdapter {
         private final TextView list_money;
         private final TextView list_state;
 
-        public ViewHolder(View view){
-            list_state = view.findViewById(R.id.list_state);
-            list_type = view.findViewById(R.id.list_type);
+        public ViewHolder(@NonNull View view){
+            // 日期
             list_date = view.findViewById(R.id.list_date);
+            // 类型
+            list_type = view.findViewById(R.id.list_type);
+            // 金额
             list_money = view.findViewById(R.id.list_money);
+            // 状态
+            list_state = view.findViewById(R.id.list_state);
         }
     }
 }

@@ -21,21 +21,20 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                app:srcCompat="@drawable/head"
-                android:layout_marginHorizontal="30dp"/>
+                android:layout_width="114dp"
+                android:layout_height="109dp"
+                android:layout_marginHorizontal="30dp"
+                app:srcCompat="@drawable/head" />
 
             <TextView
                 android:id="@+id/tv_welcome"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:layout_marginTop="3dp"
+                android:layout_weight="1"
                 android:gravity="center|left"
-                android:textColor="#4F92CF"
-                android:text="欢迎使用拾光记，
-                   随时随地记录灵感~"
+                android:text="小圆成长记录owo，                       随时随地记录灵感~"
+                android:textColor="#66BA6A"
                 android:textSize="22sp" />
         </LinearLayout>
 
@@ -86,10 +85,10 @@
                 app:cornerRadius="30dp">
 
                 <ImageView
-                    android:layout_width="80dp"
+                    android:layout_width="85dp"
                     android:layout_height="80dp"
-                    android:paddingBottom="10dp"
                     android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
                     app:srcCompat="@drawable/look" />
 
                 <TextView
